@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import Video, { ViewType } from 'react-native-video';
 import { styles } from './sttylesheet';
 
-export const MediaTile = ({
+const MediaTileComponent = ({
   item,
   width,
   height,
@@ -35,6 +35,10 @@ export const MediaTile = ({
   const [posterIndex, setPosterIndex] = useState(0);
   const [videoFailed, setVideoFailed] = useState(false);
   const [useOriginalVideo, setUseOriginalVideo] = useState(false);
+  const onRetry = useCallback(() => {
+    setVideoFailed(false);
+    setUseOriginalVideo(false);
+  }, []);
 
   return (
     <TouchableOpacity
@@ -112,13 +116,7 @@ export const MediaTile = ({
 
           {/* Playback failed, poster + retry */}
           {videoFailed && (
-            <TouchableOpacity
-              style={styles.retryOverlay}
-              onPress={() => {
-                setVideoFailed(false);
-                setUseOriginalVideo(false);
-              }}
-            >
+            <TouchableOpacity style={styles.retryOverlay} onPress={onRetry}>
               <Text style={styles.retryText}>Tap to retry</Text>
             </TouchableOpacity>
           )}
@@ -127,3 +125,4 @@ export const MediaTile = ({
     </TouchableOpacity>
   );
 };
+export const MediaTile = React.memo(MediaTileComponent);

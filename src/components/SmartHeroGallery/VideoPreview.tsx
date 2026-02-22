@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -30,6 +30,17 @@ export default function VideoPreviewScreen() {
     : [];
 
   const [posterIndex, setPosterIndex] = useState(0);
+
+  const onRetry = useCallback(() => {
+    if (videoFailed) {
+      setVideoFailed(false);
+      setUseOriginalVideo(false);
+    }
+  }, [videoFailed]);
+
+  const onGoBack = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -75,18 +86,10 @@ export default function VideoPreviewScreen() {
       <TouchableOpacity
         style={StyleSheet.absoluteFill}
         activeOpacity={1}
-        onPress={() => {
-          if (videoFailed) {
-            setVideoFailed(false);
-            setUseOriginalVideo(false);
-          }
-        }}
+        onPress={onRetry}
       >
         {/* Close button */}
-        <TouchableOpacity
-          style={styles.closeButton}
-          onPress={() => navigation.goBack()}
-        >
+        <TouchableOpacity style={styles.closeButton} onPress={onGoBack}>
           <Text style={styles.closeText}>✕</Text>
         </TouchableOpacity>
 

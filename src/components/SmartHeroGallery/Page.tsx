@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import {
   PAGE_HEIGHT,
@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { styles } from './sttylesheet';
 import { MediaTile } from './MediaTile';
 
-export default function Page({
+function Page({
   item,
   index,
 }: {
@@ -23,6 +23,22 @@ export default function Page({
   const { leftItem, rightTopItem, rightBottomItem } = item;
   const navigation: any = useNavigation();
 
+  const onLeftItemPress = useCallback(() => {
+    if (leftItem.type === 'video') {
+      navigation.navigate('VideoPreview', { item: leftItem });
+    } else {
+      navigation.navigate('ImagePreview', { item: leftItem });
+    }
+  }, [leftItem, navigation]);
+
+  const onRightTopItemPress = useCallback(() => {
+    navigation.navigate('ImagePreview', { item: rightTopItem });
+  }, [navigation, rightTopItem]);
+
+  const onRightBottomItemPress = useCallback(() => {
+    navigation.navigate('ImagePreview', { item: rightBottomItem });
+  }, [navigation, rightBottomItem]);
+
   return (
     <View style={styles.page} key={`page-${index}`}>
       {/* LEFT */}
@@ -30,14 +46,7 @@ export default function Page({
         item={leftItem}
         width={Right_TILE_WIDTH}
         height={PAGE_HEIGHT}
-        onPress={() => {
-          console.log('leftItem', leftItem);
-          if (leftItem.type === 'video') {
-            navigation.navigate('VideoPreview', { item: leftItem });
-          } else {
-            navigation.navigate('ImagePreview', { item: leftItem });
-          }
-        }}
+        onPress={onLeftItemPress}
       />
 
       {/* RIGHT */}
@@ -46,19 +55,16 @@ export default function Page({
           item={rightTopItem}
           width={Right_TILE_WIDTH}
           height={Right_TILE_HEIGHT}
-          onPress={() =>
-            navigation.navigate('ImagePreview', { item: rightTopItem })
-          }
+          onPress={onRightTopItemPress}
         />
         <MediaTile
           item={rightBottomItem}
           width={Right_TILE_WIDTH}
           height={Right_TILE_HEIGHT}
-          onPress={() =>
-            navigation.navigate('ImagePreview', { item: rightBottomItem })
-          }
+          onPress={onRightBottomItemPress}
         />
       </View>
     </View>
   );
 }
+export default React.memo(Page);

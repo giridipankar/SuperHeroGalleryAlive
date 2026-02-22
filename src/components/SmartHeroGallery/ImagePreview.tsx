@@ -1,11 +1,15 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 export default function ImagePreview(props: any) {
   const item = props.route.params.item;
   const navigation: any = useNavigation();
   console.log('>>>item', item.cdn.originalUrl);
+
+  const onPop = useCallback(() => {
+    navigation.pop();
+  }, [navigation]);
 
   return (
     <View
@@ -25,9 +29,7 @@ export default function ImagePreview(props: any) {
           paddingHorizontal: 10,
           zIndex: 999,
         }}
-        onPress={() => {
-          navigation.pop();
-        }}
+        onPress={onPop}
       >
         <Text
           style={{

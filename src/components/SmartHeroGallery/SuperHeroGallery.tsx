@@ -6,7 +6,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import React, { use, useEffect, useRef, useState } from 'react';
+import React, { use, useCallback, useEffect, useRef, useState } from 'react';
 import Page from './Page';
 import { fetchExpeienceGallery } from '../../api/Services';
 import { DUMMY_DATA, PAGE_HEIGHT, PAGE_WIDTH } from '../../common/Constant';
@@ -32,6 +32,25 @@ export default function SuperHeroGallery() {
       console.log('>>>err01', err);
     }
   };
+  const renderItem = useCallback(({ item, index }) => {
+    return <Page item={item} index={index} />;
+  }, []);
+
+  const onScrollBeginDrag = useCallback(() => {
+    setShownudge(false);
+  }, []);
+
+  const onStartReached = useCallback(() => {
+    setShownudge(true);
+  }, []);
+
+  const onNudgePress = useCallback(() => {
+    PageRef.current?.scrollToOffset({
+      offset: PAGE_WIDTH * 1,
+      animated: true,
+    });
+    setShownudge(false);
+  }, []);
 
   return (
     <View
@@ -56,17 +75,11 @@ export default function SuperHeroGallery() {
         <FlatList
           data={galleryData}
           keyExtractor={(_, index) => index}
-          renderItem={({ item, index }) => {
-            return <Page item={item} index={index} />;
-          }}
+          renderItem={renderItem}
           ref={PageRef}
           initialNumToRender={10}
-          onScrollBeginDrag={() => {
-            setShownudge(false);
-          }}
-          onStartReached={() => {
-            setShownudge(true);
-          }}
+          onScrollBeginDrag={onScrollBeginDrag}
+          onStartReached={onStartReached}
           onStartReachedThreshold={0.5}
           pagingEnabled
           horizontal={true}
@@ -101,13 +114,7 @@ export default function SuperHeroGallery() {
               elevation: 5,
               alignItems: 'center',
             }}
-            onPress={() => {
-              PageRef.current?.scrollToOffset({
-                offset: PAGE_WIDTH * 1,
-                animated: true,
-              });
-              setShownudge(false);
-            }}
+            onPress={onNudgePress}
           >
             <Text style={{ fontSize: 24, color: '#ec6d82' }}>{`>`}</Text>
           </TouchableOpacity>
