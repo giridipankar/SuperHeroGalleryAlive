@@ -96,4 +96,4 @@ The `buildPages` function is a pure, deterministic function that takes an array 
 
 # Screenshots
 
-![alt text](Screenshot_1771735000.png) ![alt text](Screenshot_1771735022.png) ![alt text](Screenshot_1771735142.png) ![alt text](Screenshot_1771735170.png) ![alt text](Screenshot_1771735206.png)
+![alt text](image.png)
