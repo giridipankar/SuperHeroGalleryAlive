@@ -18,6 +18,7 @@ export default function SuperHeroGallery() {
   const PageRef: any = useRef(null);
 
   useEffect(() => {
+    console.log('');
     getGalleryData();
   }, []);
 

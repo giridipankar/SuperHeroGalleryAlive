@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import SuperHeroGallery from './src/components/SmartHeroGallery/SuperHeroGallery';
-import { createStaticNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {createStaticNavigation} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import ImagePreview from './src/components/SmartHeroGallery/ImagePreview';
 import VideoPreviewScreen from './src/components/SmartHeroGallery/VideoPreview';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 const RootStack = createNativeStackNavigator({
   initialRouteName: 'Home',
@@ -21,7 +22,11 @@ const RootStack = createNativeStackNavigator({
 const Navigation = createStaticNavigation(RootStack);
 
 export default function App() {
-  return <Navigation />;
+  return (
+    <GestureHandlerRootView style={{flex: 1}}>
+      <Navigation />
+    </GestureHandlerRootView>
+  );
 }
 
 const styles = StyleSheet.create({
